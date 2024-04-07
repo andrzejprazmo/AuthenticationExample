@@ -16,6 +16,17 @@ public class AccountRepository : IAccountRepository
         _connectionProvider = connectionProvider ?? throw new ArgumentNullException(nameof(connectionProvider));
     }
 
+    public async Task<AccountEntity?> GetAccountById(int userId)
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"SELECT id, login, password, first_name, last_name FROM accounts WHERE id = @UserId";
+        var result = await connection.QuerySingleOrDefaultAsync<AccountRecord>(sql, new
+        {
+            UserId = userId,
+        });
+        return result?.ToAccountEntity();
+    }
+
     public async Task<AccountEntity?> GetAccountByLogin(string login)
     {
         using var connection = _connectionProvider.GetConnection();

@@ -8,6 +8,7 @@ using WebApp.Core.Abstract;
 using WebApp.Domain.Configuration;
 using WebApp.Domain.Entities;
 using WebApp.Infrastructure.Providers;
+using WebApp.Infrastructure.Records;
 
 namespace WebApp.Infrastructure.Repositories;
 
@@ -37,6 +38,22 @@ public class TokenRepository : ITokenRepository
             Expires = DateTime.UtcNow.AddMinutes(jwtConfiguration.RefreshTokenExpire).Ticks,
         });
         return refreshToken;
+    }
+
+    public async Task<RefreshTokenEntity?> GetRefreshToken(Guid tokenId)
+    {
+        string sql = @"SELECT account_id, expires FROM tokens WHERE token = @TokenId";
+        using var connection = _connectionProvider.GetConnection();
+        var result = await connection.QuerySingleOrDefaultAsync<RefreshTokenRecord>(sql, new { TokenId = tokenId.ToString() });
+        if (result != null)
+        {
+            return new RefreshTokenEntity
+            {
+                UserId = (int)result.account_id,
+                Expires = new DateTime(result.expires),
+            };
+        }
+        return null;
     }
 
     public async Task<string> CreateToken(AccountEntity account)

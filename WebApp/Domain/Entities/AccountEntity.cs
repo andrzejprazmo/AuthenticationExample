@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace WebApp.Domain.Entities;
+﻿namespace WebApp.Domain.Entities;
 
 public class AccountEntity
 {
     public int Id { get; set; }
-    public string Login { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
+    public required string Login { get; set; }
+    public required string Password { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
 }
