@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using WebApp.Core.Common.Response;
 using WebApp.Core.Common;
-using WebApp.Core.Abstract;
 using WebApp.Core.Common.Const;
+using WebApp.Core.Common.Abstract;
 
 namespace WebApp.Core.Queries.RefreshToken
 {

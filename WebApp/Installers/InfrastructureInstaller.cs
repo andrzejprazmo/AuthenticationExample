@@ -1,4 +1,4 @@
-﻿using WebApp.Core.Abstract;
+﻿using WebApp.Core.Common.Abstract;
 using WebApp.Infrastructure.Providers;
 using WebApp.Infrastructure.Repositories;
 

@@ -1,6 +1,6 @@
 ﻿using WebApp.Domain.Entities;
 
-namespace WebApp.Core.Abstract;
+namespace WebApp.Core.Common.Abstract;
 
 public interface ITokenRepository
 {

@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using WebApp.Core.Abstract;
 using WebApp.Core.Common;
+using WebApp.Core.Common.Abstract;
 using WebApp.Core.Common.Const;
 using WebApp.Core.Common.Helpers;
 using WebApp.Core.Common.Response;

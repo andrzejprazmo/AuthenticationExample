@@ -5,7 +5,7 @@ using WebApp.Core.Common.Const;
 using WebApp.Core.Queries.RefreshToken;
 
 namespace WebApp.Api.Endpoints;
-public class AuthenticationEndpoints: IEndpointsModule
+public class AuthenticationEndpoints : IEndpointsModule
 {
     const string RefreshTokenCookieKey = "RefreshToken";
 

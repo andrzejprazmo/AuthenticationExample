@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
-using WebApp.Core.Abstract;
+using WebApp.Core.Common.Abstract;
 using WebApp.Domain.Configuration;
 using WebApp.Domain.Entities;
 using WebApp.Infrastructure.Providers;
