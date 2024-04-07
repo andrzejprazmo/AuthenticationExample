@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 using WebApp.Api;
+using WebApp.Domain.Configuration;
 
 namespace WebApp.Installers;
 public static class ApiInstaller
@@ -33,13 +35,15 @@ public static class ApiInstaller
 
     public static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwtConfiguration = configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new Exception("Cannot find JWT configuration");
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
         {
             o.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidIssuer = configuration["Jwt:Issuer"],
-                ValidAudience = configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? string.Empty)),
+                ValidIssuer = jwtConfiguration.Issuer,
+                ValidAudience = jwtConfiguration.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Key)),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
