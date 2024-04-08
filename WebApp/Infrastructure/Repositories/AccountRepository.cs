@@ -38,12 +38,30 @@ public class AccountRepository : IAccountRepository
         return result?.ToAccountEntity();
     }
 
+    public async Task<IEnumerable<AccountEntity>> GetAllAccounts()
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"SELECT id, login, password, first_name, last_name FROM accounts";
+        var list = await connection.QueryAsync<AccountRecord>(sql);
+        return list.Select(x => x.ToAccountEntity());
+    }
+
     public async Task<int> CreateAccount(AccountEntity account)
     {
         using var connection = _connectionProvider.GetConnection();
         string sql = @"INSERT INTO accounts (login, password, first_name, last_name) VALUES (@Login, @Password, @FirstName, @LastName) RETURNING id";
         var result = await connection.QuerySingleAsync<int>(sql, account);
         return result;
+    }
+
+    public Task DeleteAccount(int id)
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"DELETE FROM accounts WHERE id = @Id";
+        return connection.ExecuteAsync(sql, new
+        {
+            Id = id,
+        });
     }
 
     public async Task<bool> AccountExists(string login)
@@ -67,5 +85,12 @@ public class AccountRepository : IAccountRepository
             Id = id,
         });
         return result;
+    }
+
+    public async Task<int> GetAccountCount()
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"SELECT COUNT(*) FROM accounts";
+        return await connection.QuerySingleAsync<int>(sql);
     }
 }

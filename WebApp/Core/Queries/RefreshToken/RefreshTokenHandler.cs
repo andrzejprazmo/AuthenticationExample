@@ -4,39 +4,38 @@ using WebApp.Core.Common;
 using WebApp.Core.Common.Const;
 using WebApp.Core.Common.Abstract;
 
-namespace WebApp.Core.Queries.RefreshToken
+namespace WebApp.Core.Queries.RefreshToken;
+
+public record RefreshTokenRequest(string Token, Guid RefreshToken) : IRequest<Result<TokenDto>>;
+public class RefreshTokenHandler : IRequestHandler<RefreshTokenRequest, Result<TokenDto>>
 {
-    public record RefreshTokenRequest(string Token, Guid RefreshToken) : IRequest<Result<TokenDto>>;
-    public class RefreshTokenHandler : IRequestHandler<RefreshTokenRequest, Result<TokenDto>>
+    private readonly ITokenRepository _tokenRepository;
+    private readonly IAccountRepository _accountRepository;
+
+    public RefreshTokenHandler(ITokenRepository tokenRepository, IAccountRepository accountRepository)
     {
-        private readonly ITokenRepository _tokenRepository;
-        private readonly IAccountRepository _accountRepository;
+        _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
+        _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+    }
 
-        public RefreshTokenHandler(ITokenRepository tokenRepository, IAccountRepository accountRepository)
+    public async Task<Result<TokenDto>> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
+    {
+        var refreshToken = await _tokenRepository.GetRefreshToken(request.RefreshToken);
+        if (refreshToken != null && refreshToken!.Expires > DateTime.UtcNow)
         {
-            _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
-            _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
-        }
-
-        public async Task<Result<TokenDto>> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
-        {
-            var refreshToken = await _tokenRepository.GetRefreshToken(request.RefreshToken);
-            if (refreshToken != null && refreshToken!.Expires > DateTime.UtcNow)
+            var account = await _accountRepository.GetAccountById(refreshToken.UserId);
+            if (account != null)
             {
-                var account = await _accountRepository.GetAccountById(refreshToken.UserId);
-                if (account != null)
+                var token = await _tokenRepository.CreateToken(account);
+                var newRefreshToken = await _tokenRepository.CreateRefreshToken(account.Id);
+                return new TokenDto
                 {
-                    var token = await _tokenRepository.CreateToken(account);
-                    var newRefreshToken = await _tokenRepository.CreateRefreshToken(account.Id);
-                    return new TokenDto
-                    {
-                        RefreshToken = newRefreshToken,
-                        Token = token,
-                    };
+                    RefreshToken = newRefreshToken,
+                    Token = token,
+                };
 
-                }
             }
-            return new Result<TokenDto>([ErrorCodes.GetValidationFailure(nameof(RefreshTokenRequest.RefreshToken), ErrorCodes.AUTHENTICATE_REFRESHTOKEN_EXPIRED)]);
         }
+        return new Result<TokenDto>([ErrorCodes.GetValidationFailure(nameof(RefreshTokenRequest.RefreshToken), ErrorCodes.AUTHENTICATE_REFRESHTOKEN_EXPIRED)]);
     }
 }
