@@ -9,7 +9,7 @@ var webApplicationOptions = new WebApplicationOptions
     WebRootPath = "wwwroot/browser"
 };
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(webApplicationOptions);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(context =>
