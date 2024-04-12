@@ -2,7 +2,7 @@
 using WebApp.Core.Common.Abstract;
 using WebApp.Core.Common.Response;
 
-namespace WebApp.Core.Queries.GetAllAccounts;
+namespace WebApp.Core.Queries.Account.GetAll;
 
 public record GetAllAccountsRequest : IRequest<IEnumerable<AccountDto>>;
 public class GetAllAccountsHandler : IRequestHandler<GetAllAccountsRequest, IEnumerable<AccountDto>>

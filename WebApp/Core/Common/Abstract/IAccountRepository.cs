@@ -8,6 +8,8 @@ public interface IAccountRepository
     Task<AccountEntity?> GetAccountById(int userId);
     Task<IEnumerable<AccountEntity>> GetAllAccounts();
     Task<int> CreateAccount(AccountEntity account);
+    Task<AccountEntity> EditAccount(int id);
+    Task UpdateAccount(AccountEntity account);
     Task DeleteAccount(int id);
     Task<bool> AccountExists(string login);
     Task<bool> AccountExists(string login, int id);

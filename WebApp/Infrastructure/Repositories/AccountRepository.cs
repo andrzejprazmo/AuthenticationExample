@@ -54,6 +54,24 @@ public class AccountRepository : IAccountRepository
         return result;
     }
 
+    public async Task<AccountEntity> EditAccount(int id)
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"SELECT id, login, first_name, last_name FROM accounts WHERE id = @Id";
+        var result = await connection.QuerySingleAsync<AccountRecord>(sql, new
+        {
+            Id = id,
+        });
+        return result.ToAccountEntity();
+    }
+
+    public async Task UpdateAccount(AccountEntity account)
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"UPDATE accounts SET login = @Login, first_name = @FirstName, last_name = @LastName WHERE id = @Id";
+        await connection.ExecuteAsync(sql, account);
+    }
+
     public Task DeleteAccount(int id)
     {
         using var connection = _connectionProvider.GetConnection();

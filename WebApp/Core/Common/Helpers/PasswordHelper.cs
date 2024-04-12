@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace WebApp.Core.Common.Helpers;
 
@@ -13,5 +14,11 @@ public static class PasswordHelper
         var salt = Encoding.UTF8.GetBytes($".{login.ToLower()}");
         hash = hash.Concat(salt).ToArray();
         return "{SSHA512}" + Convert.ToBase64String(hash);
+    }
+
+    public static bool IsStrong(string password)
+    {
+        var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*]).{8,}$");
+        return regex.IsMatch(password);
     }
 }
