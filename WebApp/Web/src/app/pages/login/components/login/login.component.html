@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center layout-anonymous">
+    <div class="w-25">
+        <h4 class="m-4 d-flex justify-content-center">Authentication example</h4>
+        <form [formGroup]="loginForm" class="form" (ngSubmit)="onSubmit()">
+            <div class="card">
+                <div class="card-header">Login to application.</div>
+                <div class="card-body">
+                    @if (loginForm.hasError('invalidCredentials')) {
+                    <div class="alert alert-danger">Bad user or password</div>
+                    }
+                    <div class="form-group mb-2">
+                        <label for="login">Login</label>
+                        <input type="text" id="login" formControlName="login" class="form-control" [class.is-invalid]="loginForm.get('login')?.touched && loginForm.get('login')?.invalid">
+                        @if (loginForm.get('login')?.hasError('required')) {
+                            <div class="invalid-feedback">Login is required</div>
+                        }
+                    </div>
+        
+                    <div class="form-group mb-2">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" formControlName="password" class="form-control" [class.is-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+                        @if (loginForm.get('password')?.hasError('required')) {
+                            <div class="invalid-feedback">Password is required</div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-primary ms-auto">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="copyright mt-1 d-flex"><span class="ms-auto">Copyright by: See Software 2024.</span></div>
+    </div>
+</div>

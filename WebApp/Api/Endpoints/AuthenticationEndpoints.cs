@@ -42,6 +42,11 @@ public class AuthenticationEndpoints : IEndpointsModule
         {
             return Results.Unauthorized();
         }
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            RemoveRefreshTokenCookie(context);
+            return Results.Unauthorized();
+        }
         var result = await mediator.Send(new RefreshTokenRequest(token, refreshToken.Value));
         return result.Match(data =>
         {
