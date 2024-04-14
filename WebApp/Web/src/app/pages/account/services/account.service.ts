@@ -1,4 +1,5 @@
 import { AccountCreateForm, AccountCreateModel, AccountItem } from '@account/types/account.types';
+import { confirmPasswordValidator, passwordStrengthValidator } from '@account/validators/account.validators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -20,9 +21,9 @@ export class AccountService {
       login: new FormControl(model.login, [Validators.required]),
       firstName: new FormControl(model.firstName, [Validators.required]),
       lastName: new FormControl(model.lastName, [Validators.required]),
-      password: new FormControl(model.password, [Validators.required]),
+      password: new FormControl(model.password, [Validators.required, passwordStrengthValidator]),
       confirmPassword: new FormControl('', [Validators.required]),
-    });
+    }, { validators: confirmPasswordValidator });
   }
 
   createAccount(model: AccountCreateModel): Observable<number> {

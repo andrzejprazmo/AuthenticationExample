@@ -2,7 +2,6 @@
 using WebApp.Core.Common.Abstract;
 using WebApp.Core.Common.Const;
 using WebApp.Core.Common.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApp.Core.Commands.Account.Create;
 

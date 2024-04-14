@@ -26,7 +26,7 @@
                         @if (form.get('login')?.hasError('required')) {
                             <div class="invalid-feedback">Login is required</div>
                         }
-                        @if (form.get('login')?.hasError('exists')) {
+                        @if (form.get('login')?.hasError('ACCOUNT_LOGIN_EXISTS')) {
                             <div class="invalid-feedback">This login exists</div>
                         }
                     </div>
@@ -46,8 +46,8 @@
                         @if (form.get('confirmPassword')?.hasError('required')) {
                             <div class="invalid-feedback">Password is required</div>
                         }
-                        @if (form.get('confirmPassword')?.hasError('notmatch')) {
-                            <div class="invalid-feedback">Passwords are different</div>
+                        @if (form.get('confirmPassword')?.hasError('mismatch')) {
+                            <div class="invalid-feedback">Passwords are not matched</div>
                         }
                     </div>
         
