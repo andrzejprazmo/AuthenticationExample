@@ -4,6 +4,7 @@ using MediatR;
 using WebApp.Core.Common;
 using WebApp.Core.Common.Abstract;
 using WebApp.Core.Common.Const;
+using WebApp.Core.Common.Extensions;
 using WebApp.Core.Common.Helpers;
 using WebApp.Core.Common.Response;
 
@@ -16,12 +17,14 @@ public class AuthenticateHandler : IRequestHandler<AuthenticateRequest, Result<T
     private readonly IValidator<AuthenticateRequest> _validator;
     private readonly IAccountRepository _accountRepository;
     private readonly ITokenRepository _tokenRepository;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public AuthenticateHandler(IValidator<AuthenticateRequest> validator, IAccountRepository accountRepository, ITokenRepository tokenRepository)
+    public AuthenticateHandler(IValidator<AuthenticateRequest> validator, IAccountRepository accountRepository, ITokenRepository tokenRepository, IHttpContextAccessor contextAccessor)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
+        _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
     }
 
     public async Task<Result<TokenDto>> Handle(AuthenticateRequest request, CancellationToken cancellationToken)
@@ -37,9 +40,9 @@ public class AuthenticateHandler : IRequestHandler<AuthenticateRequest, Result<T
                 {
                     var token = await _tokenRepository.CreateToken(account);
                     var refreshToken = await _tokenRepository.CreateRefreshToken(account.Id);
+                    _contextAccessor.SetRefreshToken(refreshToken);
                     return new TokenDto
                     {
-                        RefreshToken = refreshToken,
                         Token = token,
                     };
                 }

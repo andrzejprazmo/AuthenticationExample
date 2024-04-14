@@ -40,10 +40,11 @@ export class AuthService {
     return true;
   }
 
-  refreshToken(): Observable<any> {
-    const http = new HttpClient(this.httpBackend);
-    const currentToken = this.loadToken();
-    return http.get(`api/auth/refresh-token/${currentToken}`).pipe(map((newToken: any) => {
+  refreshToken(): Observable<string> {
+    const http = new HttpClient(this.httpBackend); // omitting interceptor
+    return http.post<string>(`api/auth/refresh-token`, {
+      token: this.loadToken()
+    }).pipe(map((newToken: string) => {
       this.saveToken(newToken);
       return newToken;
     }));
