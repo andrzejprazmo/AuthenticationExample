@@ -1,6 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-
-namespace WebApp.Core.Common.Extensions
+﻿namespace WebApp.Core.Common.Extensions
 {
     public static class HttpContextAccessorExtensions
     {

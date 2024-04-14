@@ -1,12 +1,13 @@
 import { AccountService } from '@account/services/account.service';
 import { AccountItem } from '@account/types/account.types';
 import { Component, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.css'
 })

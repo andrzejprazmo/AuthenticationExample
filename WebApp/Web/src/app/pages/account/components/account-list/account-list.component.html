@@ -1,2 +1,41 @@
-<p>account-list works!</p>
-<div><button class="btn btn-primary" (click)="getList()">Get accounts</button></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex flex-row m-2">
+                <h4>Account list</h4>
+                <a class="btn btn-primary ms-auto" href="#" routerLink="/account/create">Create new account</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Login</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th class="text-end"><button type="button" class="btn btn-sm btn-secondary" (click)="getList()">Refresh</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of list; track $index) {
+                    <tr>
+                        <td>{{ item.login }}</td>
+                        <td>{{ item.firstName }}</td>
+                        <td>{{ item.lastName }}</td>
+                        <td style="width:1%;">
+                            <div class="text-nowrap">
+                                <a href="#" routeLink="">Edit</a><span class="mx-1">|</span>
+                                <a href="#" routeLink="">Password</a><span class="mx-1">|</span>
+                                <a href="#" routeLink="">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
