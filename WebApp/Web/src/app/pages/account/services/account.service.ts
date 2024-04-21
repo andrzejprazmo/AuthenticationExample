@@ -1,4 +1,4 @@
-import { AccountCreateForm, AccountCreateModel, AccountItem } from '@account/types/account.types';
+import { AccountCreateForm, AccountCreateModel, AccountEditModel, AccountEditForm, AccountItem } from '@account/types/account.types';
 import { confirmPasswordValidator, passwordStrengthValidator } from '@account/validators/account.validators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
@@ -26,8 +26,25 @@ export class AccountService {
     }, { validators: confirmPasswordValidator });
   }
 
+  buildEditAccountForm(model: AccountEditModel): AccountEditForm {
+    return new FormGroup({
+      id: new FormControl(model.id, [Validators.required]),
+      login: new FormControl(model.login, [Validators.required]),
+      firstName: new FormControl(model.firstName, [Validators.required]),
+      lastName: new FormControl(model.lastName, [Validators.required]),
+    });
+  }
+
   createAccount(model: AccountCreateModel): Observable<number> {
     return this.http.post<number>('/api/account/create', model);
+  }
+
+  editAccount(id: number): Observable<AccountEditModel>{
+    return this.http.get<AccountEditModel>(`/api/account/edit/${id}`);
+  }
+
+  updateAccount(model: AccountEditModel): Observable<any> {
+    return this.http.put('/api/account/update', model);
   }
 }
 

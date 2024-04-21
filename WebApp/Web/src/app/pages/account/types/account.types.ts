@@ -21,3 +21,17 @@ export declare type AccountCreateForm = FormGroup<{
     password: FormControl<string | null>;
     confirmPassword: FormControl<string | null>;
 }>
+
+export interface AccountEditModel {
+    id: number;
+    login: string;
+    firstName: string;
+    lastName: string;
+}
+
+export declare type AccountEditForm = FormGroup<{
+    id: FormControl<number | null>;
+    login: FormControl<string | null>;
+    firstName: FormControl<string | null>;
+    lastName: FormControl<string | null>;
+}>
