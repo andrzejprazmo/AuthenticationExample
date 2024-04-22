@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Core.Commands.Account.Create;
 using WebApp.Core.Commands.Account.Delete;
+using WebApp.Core.Commands.Account.Password;
 using WebApp.Core.Commands.Account.Update;
 using WebApp.Core.Common.Response;
 using WebApp.Core.Queries.Account.Edit;
@@ -20,6 +21,7 @@ public class AccountEndpoints : IEndpointsModule
         app.MapPut("/api/account/update", handler: Update).RequireAuthorization().WithName("Update");
         app.MapGet("/api/account/list", handler: List).RequireAuthorization().WithName("List");
         app.MapDelete("/api/account/delete/{id}", handler: Delete).RequireAuthorization().WithName("Delete");
+        app.MapPut("/api/account/password", handler: Password).RequireAuthorization().WithName("Password");
     }
 
     [ProducesResponseType(200, Type = typeof(IEnumerable<AccountDto>))]
@@ -47,6 +49,16 @@ public class AccountEndpoints : IEndpointsModule
 
     [ProducesResponseType(200)]
     private async Task<IResult> Update(HttpContext context, [FromServices] IMediator mediator, [FromBody] UpdateAccountRequest request)
+    {
+        var result = await mediator.Send(request);
+        return result.Match((data) =>
+        {
+            return Results.Ok(data);
+        }, (errors) => Results.BadRequest(errors));
+    }
+
+    [ProducesResponseType(200)]
+    private async Task<IResult> Password(HttpContext context, [FromServices] IMediator mediator, [FromBody] SetPasswordRequest request)
     {
         var result = await mediator.Send(request);
         return result.Match((data) =>

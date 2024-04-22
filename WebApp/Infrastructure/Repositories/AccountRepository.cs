@@ -16,13 +16,13 @@ public class AccountRepository : IAccountRepository
         _connectionProvider = connectionProvider ?? throw new ArgumentNullException(nameof(connectionProvider));
     }
 
-    public async Task<AccountEntity?> GetAccountById(int userId)
+    public async Task<AccountEntity?> GetAccountById(int id)
     {
         using var connection = _connectionProvider.GetConnection();
         string sql = @"SELECT id, login, password, first_name, last_name FROM accounts WHERE id = @UserId";
         var result = await connection.QuerySingleOrDefaultAsync<AccountRecord>(sql, new
         {
-            UserId = userId,
+            UserId = id,
         });
         return result?.ToAccountEntity();
     }
@@ -79,6 +79,17 @@ public class AccountRepository : IAccountRepository
         return connection.ExecuteAsync(sql, new
         {
             Id = id,
+        });
+    }
+
+    public async Task SetPassword(int id, string password)
+    {
+        using var connection = _connectionProvider.GetConnection();
+        string sql = @"UPDATE accounts SET password = @Password WHERE id = @Id";
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id,
+            Password = password,
         });
     }
 
