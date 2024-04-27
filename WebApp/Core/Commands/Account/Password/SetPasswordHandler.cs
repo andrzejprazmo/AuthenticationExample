@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using WebApp.Core.Common;
 using WebApp.Core.Common.Abstract;
+using WebApp.Core.Common.Helpers;
 
 namespace WebApp.Core.Commands.Account.Password
 {
@@ -22,8 +24,14 @@ namespace WebApp.Core.Commands.Account.Password
             var validationResult = _validator.Validate(request);
             if (validationResult.IsValid)
             {
-                await _accountRepository.SetPassword(request.Id, request.Password);
-                return true;
+                var account = await _accountRepository.GetAccountById(request.Id);
+                if (account != null)
+                {
+                    var encryptedPassword = PasswordHelper.EncryptSSHA512(account.Login, request.Password);
+                    await _accountRepository.SetPassword(request.Id, encryptedPassword);
+                    return true;
+                }
+                return new Result<bool>(new List<ValidationFailure> { new ValidationFailure(string.Empty, "Cannot find id") });
             }
             return new Result<bool>(validationResult.Errors);
         }

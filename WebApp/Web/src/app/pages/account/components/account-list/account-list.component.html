@@ -28,8 +28,8 @@
                         <td style="width:1%;">
                             <div class="text-nowrap">
                                 <a href="#" [routerLink]="'edit/' + item.id">Edit</a><span class="mx-1">|</span>
-                                <a href="#" routeLink="">Password</a><span class="mx-1">|</span>
-                                <a href="#" routeLink="">Delete</a>
+                                <a href="javascript:void(0);" (click)="setPassword(item)">Password</a><span class="mx-1">|</span>
+                                <a href="javascript:void(0);" (click)="removeAccount(item)">Delete</a>
                             </div>
                         </td>
                     </tr>

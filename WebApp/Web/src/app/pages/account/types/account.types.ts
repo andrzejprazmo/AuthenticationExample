@@ -35,3 +35,14 @@ export declare type AccountEditForm = FormGroup<{
     firstName: FormControl<string | null>;
     lastName: FormControl<string | null>;
 }>
+
+export declare type AccountPasswordForm = FormGroup<{
+    id: FormControl<number | null>;
+    password: FormControl<string | null>;
+    confirmPassword: FormControl<string | null>;
+}>
+
+export interface AccountPasswordModel {
+    id: number;
+    password: string;
+}

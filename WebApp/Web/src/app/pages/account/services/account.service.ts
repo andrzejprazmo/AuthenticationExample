@@ -1,4 +1,4 @@
-import { AccountCreateForm, AccountCreateModel, AccountEditModel, AccountEditForm, AccountItem } from '@account/types/account.types';
+import { AccountCreateForm, AccountCreateModel, AccountEditModel, AccountEditForm, AccountItem, AccountPasswordForm, AccountPasswordModel } from '@account/types/account.types';
 import { confirmPasswordValidator, passwordStrengthValidator } from '@account/validators/account.validators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
@@ -35,6 +35,14 @@ export class AccountService {
     });
   }
 
+  buildSetPasswordForm(id: number): AccountPasswordForm {
+    return new FormGroup({
+      id: new FormControl(id, [Validators.required]),
+      password: new FormControl('', [Validators.required, passwordStrengthValidator]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    }, { validators: confirmPasswordValidator });
+  }
+
   createAccount(model: AccountCreateModel): Observable<number> {
     return this.http.post<number>('/api/account/create', model);
   }
@@ -45,6 +53,14 @@ export class AccountService {
 
   updateAccount(model: AccountEditModel): Observable<any> {
     return this.http.put('/api/account/update', model);
+  }
+
+  setPassword(model: AccountPasswordModel): Observable<any> {
+    return this.http.put('/api/account/password', model);
+  }
+
+  removeAccount(id: number): Observable<any> {
+    return this.http.delete(`/api/account/delete/${id}`);
   }
 }
 

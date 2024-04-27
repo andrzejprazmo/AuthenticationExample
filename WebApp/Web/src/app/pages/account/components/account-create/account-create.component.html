@@ -6,51 +6,57 @@
             <div class="card-body">
                 <div class="form-group mb-2">
                     <label for="firstName">First name</label>
-                    <input type="text" id="firstName" formControlName="firstName" class="form-control" [class.is-invalid]="form.get('firstName')?.touched && form.get('firstName')?.invalid">
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control"
+                        [class.is-invalid]="form.get('firstName')?.touched && form.get('firstName')?.invalid">
                     @if (form.get('firstName')?.hasError('required')) {
-                        <div class="invalid-feedback">First name is required</div>
+                    <div class="invalid-feedback">First name is required</div>
                     }
                 </div>
                 <div class="form-group mb-2">
                     <label for="lastName">Last name</label>
-                    <input type="text" id="lastName" formControlName="lastName" class="form-control" [class.is-invalid]="form.get('lastName')?.touched && form.get('lastName')?.invalid">
+                    <input type="text" id="lastName" formControlName="lastName" class="form-control"
+                        [class.is-invalid]="form.get('lastName')?.touched && form.get('lastName')?.invalid">
                     @if (form.get('lastName')?.hasError('required')) {
-                        <div class="invalid-feedback">Last name is required</div>
+                    <div class="invalid-feedback">Last name is required</div>
                     }
                 </div>
                 <fieldset class="border password-region">
                     <legend class="float-none w-auto">Authentication:</legend>
                     <div class="form-group mb-2">
                         <label for="login">Login</label>
-                        <input type="text" id="login" formControlName="login" class="form-control" [class.is-invalid]="form.get('login')?.touched && form.get('login')?.invalid">
+                        <input type="text" id="login" formControlName="login" class="form-control"
+                            [class.is-invalid]="form.get('login')?.touched && form.get('login')?.invalid">
                         @if (form.get('login')?.hasError('required')) {
-                            <div class="invalid-feedback">Login is required</div>
+                        <div class="invalid-feedback">Login is required</div>
                         }
                         @if (form.get('login')?.hasError('ACCOUNT_LOGIN_EXISTS')) {
-                            <div class="invalid-feedback">This login exists</div>
+                        <div class="invalid-feedback">This login exists</div>
                         }
                     </div>
-                        <div class="form-group mb-2">
+                    <div class="form-group mb-2">
                         <label for="password">New password</label>
-                        <input type="password" id="password" formControlName="password" class="form-control" [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid">
+                        <input type="password" id="password" formControlName="password" class="form-control"
+                            [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid">
                         @if (form.get('password')?.hasError('required')) {
-                            <div class="invalid-feedback">Password is required</div>
+                        <div class="invalid-feedback">Password is required</div>
                         }
                         @if (form.get('password')?.hasError('weak')) {
-                            <div class="invalid-feedback">Password is to weak</div>
+                        <div class="invalid-feedback">Password is to weak</div>
                         }
                     </div>
                     <div class="form-group mb-2">
                         <label for="confirmPassword">Confirm password</label>
-                        <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" [class.is-invalid]="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid">
+                        <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                            class="form-control"
+                            [class.is-invalid]="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid">
                         @if (form.get('confirmPassword')?.hasError('required')) {
-                            <div class="invalid-feedback">Password is required</div>
+                        <div class="invalid-feedback">Password is required</div>
                         }
                         @if (form.get('confirmPassword')?.hasError('mismatch')) {
-                            <div class="invalid-feedback">Passwords are not matched</div>
+                        <div class="invalid-feedback">Passwords are not matched</div>
                         }
                     </div>
-        
+
                 </fieldset>
 
             </div>
