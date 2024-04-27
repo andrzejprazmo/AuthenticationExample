@@ -6,11 +6,12 @@ import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { AccountPasswordComponent } from '../account-password/account-password.component';
 import { AccountRemoveComponent } from '../account-remove/account-remove.component';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [RouterModule, ModalModule],
+  imports: [RouterModule, ModalModule, ToastrModule],
   providers: [BsModalService],
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.css'
@@ -20,6 +21,7 @@ export default class AccountListComponent {
   subscriptions: Subscription[] = [];
   accountService = inject(AccountService);
   modal = inject(BsModalService);
+  toastr = inject(ToastrService);
 
   list: AccountItem[] = [];
 
@@ -41,7 +43,7 @@ export default class AccountListComponent {
     };
     this.modal.show(AccountPasswordComponent, { initialState }).onHide?.subscribe(result => {
       if (result === 'SUCCESS') {
-        console.log(result);
+        this.toastr.success('Password updated successfully');
       }
     });
   }
