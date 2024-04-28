@@ -54,6 +54,7 @@ export default class AccountListComponent {
     };
     this.modal.show(AccountRemoveComponent, { initialState }).onHide?.subscribe(result => {
       if (result === 'SUCCESS') {
+        this.toastr.success('Account has been removed successfully');
         this.getList();
       }
     });

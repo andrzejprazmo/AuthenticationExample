@@ -33,7 +33,7 @@
             <div class="card-footer">
                 <div class="d-flex flex-row">
                     <a href="#" class="btn btn-secondary" routerLink="/account">Cancel</a>
-                    <button type="submit" class="btn btn-primary ms-auto">Update</button>
+                    <button type="submit" class="btn btn-primary ms-auto" [disabled]="!form.valid">Update</button>
                 </div>
             </div>
 
