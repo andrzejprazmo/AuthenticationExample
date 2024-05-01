@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
             return sessionStorage.getItem('Authorization');
           },
           allowedDomains: [
-            'localhost'
+            '*'
           ]
         }
       }),
