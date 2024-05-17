@@ -3,6 +3,7 @@ import { confirmPasswordValidator, passwordStrengthValidator } from '@account/va
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { APPLICATION_CONFIG } from '@shared/types/global.types';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,8 +12,10 @@ import { Observable } from 'rxjs';
 export class AccountService {
 
   http = inject(HttpClient);
+  globalConfig = inject(APPLICATION_CONFIG);
 
   getAccounts(): Observable<AccountItem[]> {
+    console.log(this.globalConfig.baseDomain);
     return this.http.get<AccountItem[]>('/api/account/list');
   }
 
