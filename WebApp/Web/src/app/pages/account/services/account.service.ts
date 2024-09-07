@@ -23,6 +23,7 @@ export class AccountService {
       lastName: new FormControl(model.lastName, [Validators.required]),
       password: new FormControl(model.password, [Validators.required, passwordStrengthValidator]),
       confirmPassword: new FormControl('', [Validators.required]),
+      birthDate: new FormControl(model.birthDate,[Validators.required]),
     }, { validators: confirmPasswordValidator });
   }
 

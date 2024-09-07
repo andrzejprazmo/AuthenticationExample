@@ -12,6 +12,7 @@ export interface AccountCreateModel {
     firstName: string;
     lastName: string;
     password: string;
+    birthDate: Date | null;
 }
 
 export declare type AccountCreateForm = FormGroup<{
@@ -20,6 +21,7 @@ export declare type AccountCreateForm = FormGroup<{
     lastName: FormControl<string | null>;
     password: FormControl<string | null>;
     confirmPassword: FormControl<string | null>;
+    birthDate: FormControl<Date | null>;
 }>
 
 export interface AccountEditModel {

@@ -4,12 +4,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import DatePickerComponent from '@shared/controls/date-picker/date-picker.component';
 import { addFormErrors } from '@shared/helpers/error.helper';
 
 @Component({
   selector: 'app-account-create',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, DatePickerComponent],
   templateUrl: './account-create.component.html',
   styleUrl: './account-create.component.css'
 })
@@ -22,7 +23,8 @@ export default class AccountCreateComponent {
     login: '',
     firstName: '',
     lastName: '',
-    password: ''
+    password: '',
+    birthDate: null
   });
 
   onSubmit() {
@@ -46,6 +48,7 @@ export default class AccountCreateComponent {
       firstName: form.controls.firstName.value || '' as string,
       lastName: form.controls.lastName.value || '' as string,
       password: form.controls.password.value || '' as string,
+      birthDate: form.controls.birthDate.value || null as Date | null
     }
   }
 }
