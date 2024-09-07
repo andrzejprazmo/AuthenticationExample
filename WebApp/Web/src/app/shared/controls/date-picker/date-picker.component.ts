@@ -3,6 +3,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Month, Week, WeekDay, CalendarData, Day } from './date-picker.types';
 import { CommonModule } from '@angular/common';
 
+enum ControlMode {
+  Calendar,
+  Months,
+  Years
+}
+
 @Component({
   selector: 'app-date-picker',
   standalone: true,
@@ -18,7 +24,7 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export default class DatePickerComponent implements ControlValueAccessor, OnInit {
-  @Input() format: string = 'yyyy-MM-dd';
+  @Input() format: string = 'ymd';
   @Input() placeholder: string = 'Enter date';
 
   value: Date | null = null;
@@ -27,19 +33,47 @@ export default class DatePickerComponent implements ControlValueAccessor, OnInit
   onTouch: any = () => { }
 
   calendarVisible: boolean = false;
+  ControlMode = ControlMode;
+  mode: ControlMode = ControlMode.Calendar;
+
+  calendarData: CalendarData = this.calculateCalendarData(this.value || new Date());
+
+  monthDictionary: Month[][] = [
+    [
+      { index: 0, fullName: 'Styczeń', shortName: 'sty' },
+      { index: 1, fullName: 'Luty', shortName: 'lut' },
+      { index: 2, fullName: 'Marzec', shortName: 'mar' },
+    ],
+    [
+      { index: 3, fullName: 'Kwiecień', shortName: 'kwi' },
+      { index: 4, fullName: 'Maj', shortName: 'maj' },
+      { index: 5, fullName: 'Czerwiec', shortName: 'cze' },
+    ],
+    [
+      { index: 6, fullName: 'Lipiec', shortName: 'lip' },
+      { index: 7, fullName: 'Sierpień', shortName: 'sie' },
+      { index: 8, fullName: 'Wrzesień', shortName: 'wrz' },
+    ],
+    [
+      { index: 9, fullName: 'Październik', shortName: 'paź' },
+      { index: 10, fullName: 'Listopad', shortName: 'lis' },
+      { index: 11, fullName: 'Grudzień', shortName: 'gru' }
+    ]
+  ]
+
   months: Month[] = [
-    { fullName: 'Styczeń', shortName: 'sty', daysCount: 31 },
-    { fullName: 'Luty', shortName: 'lut', daysCount: 29 },
-    { fullName: 'Marzec', shortName: 'mar', daysCount: 31 },
-    { fullName: 'Kwiecień', shortName: 'kwi', daysCount: 30 },
-    { fullName: 'Maj', shortName: 'maj', daysCount: 31 },
-    { fullName: 'Czerwiec', shortName: 'cze', daysCount: 30 },
-    { fullName: 'Lipiec', shortName: 'lip', daysCount: 31 },
-    { fullName: 'Sierpień', shortName: 'sie', daysCount: 31 },
-    { fullName: 'Wrzesień', shortName: 'wrz', daysCount: 30 },
-    { fullName: 'Październik', shortName: 'paź', daysCount: 31 },
-    { fullName: 'Listopad', shortName: 'lis', daysCount: 30 },
-    { fullName: 'Grudzień', shortName: 'gru', daysCount: 31 }
+    { index: 0, fullName: 'Styczeń', shortName: 'sty' },
+    { index: 1, fullName: 'Luty', shortName: 'lut' },
+    { index: 2, fullName: 'Marzec', shortName: 'mar' },
+    { index: 3, fullName: 'Kwiecień', shortName: 'kwi' },
+    { index: 4, fullName: 'Maj', shortName: 'maj' },
+    { index: 5, fullName: 'Czerwiec', shortName: 'cze' },
+    { index: 6, fullName: 'Lipiec', shortName: 'lip' },
+    { index: 7, fullName: 'Sierpień', shortName: 'sie' },
+    { index: 8, fullName: 'Wrzesień', shortName: 'wrz' },
+    { index: 9, fullName: 'Październik', shortName: 'paź' },
+    { index: 10, fullName: 'Listopad', shortName: 'lis' },
+    { index: 11, fullName: 'Grudzień', shortName: 'gru' }
   ];
 
   weekDays: WeekDay[] = [
@@ -53,23 +87,21 @@ export default class DatePickerComponent implements ControlValueAccessor, OnInit
   ];
 
   get formattedValue(): string {
-    return this.value ? this.value.toISOString().split('T')[0] : '';
-  }
-
-  get calendarData(): CalendarData {
-    const date = this.value ? this.value : new Date();
-    return {
-      year: date.getFullYear(),
-      month: date.getMonth(),
-      day: date.getDay(),
-      weeks: this.getWeeks(date)
+    if(this.value) {
+      const day = this.value.getDate();
+      const month = this.value.getMonth() + 1;
+      const year = this.value.getFullYear();
+      if(this.format === 'dmy') return `${day < 10 ? '0' : ''}${day}-${month < 10 ? '0' : ''}${month}-${year}`;
+      if(this.format === 'ymd') return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
     }
+    return '';
   }
 
   ngOnInit(): void {
     window.onclick = (element: any) => {
-      if (!element.target.matches('.calendar-button')) {
+      if (!element.target.matches('.date-picker-action')) {
         this.calendarVisible = false;
+        this.setMode(ControlMode.Calendar);
       }
     }
   }
@@ -91,7 +123,11 @@ export default class DatePickerComponent implements ControlValueAccessor, OnInit
     this.calendarVisible = !this.calendarVisible;
   }
 
-  getWeeks(date: Date): Week[] {
+  setMode(mode: ControlMode) {
+    this.mode = mode;
+  }
+
+  calculateCalendarData(date: Date): CalendarData {
     const result: Week[] = [];
     const firstDayDate = new Date(date.getFullYear(), date.getMonth(), 1);
     const lastDayDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -102,26 +138,12 @@ export default class DatePickerComponent implements ControlValueAccessor, OnInit
     for (let w = 0; w < numOfWeeks; w++) {
       var days: Day[] = [];
       for(let d = 0; d < 7; d++) {
-        if(w == 0 && d < firstDayOfWeek) {
-          days[d] = {
-            day: 0,
-            month: 0,
-            year: 0,
-          };
-          continue;
-        }
-        if(day >= lastDayDate.getDate()) {
-          days[d] = {
-            day: 0,
-            month: 0,
-            year: 0,
-          };
-          day++;
+        if(w == 0 && d < firstDayOfWeek || day >= lastDayDate.getDate()) {
           continue;
         }
         days[d] = {
           day: ++day,
-          month: date.getMonth() + 1,
+          month: date.getMonth(),
           year: date.getFullYear(),
         }
       }
@@ -129,10 +151,23 @@ export default class DatePickerComponent implements ControlValueAccessor, OnInit
         days: days
       });
     }
-    return result;
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      day: date.getDay(),
+      monthTable: result
+    };
+  }
+
+  onMonthClick(index: number) {
+    this.calendarData = this.calculateCalendarData(new Date(this.calendarData.year, index, 1));
+    this.mode = ControlMode.Calendar;
   }
 
   onDayClick(day: Day) {
-    console.log(day);
+    this.value = new Date(day.year, day.month, day.day);
+    this.onChange(this.value);
+    this.onTouch();
+    this.calendarVisible = false;
   }
 }

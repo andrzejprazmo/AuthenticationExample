@@ -1,7 +1,7 @@
 export interface Month {
+    index: number;
     fullName: string;
     shortName: string;
-    daysCount: number;
 }
 export interface WeekDay {
     fullName: string;
@@ -19,5 +19,5 @@ export interface CalendarData {
     year: number;
     month: number;
     day: number;
-    weeks: Week[];
+    monthTable: Week[];
 }

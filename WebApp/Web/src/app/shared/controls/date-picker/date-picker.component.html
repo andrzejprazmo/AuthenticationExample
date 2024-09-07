@@ -1,17 +1,29 @@
 <div class="input-group">
     <input type="text" class="form-control" [placeholder]="placeholder" [value]="formattedValue">
-    <button class="btn btn-outline-secondary calendar-button" type="button" (click)="toggleCalendar()">Calendar</button>
+    <button class="btn btn-outline-secondary date-picker-action" type="button" (click)="toggleCalendar()">Calendar</button>
 </div>
 <div class="dropdown">
     @if(calendarVisible) {
     <div class="dropdown-content">
-        <ng-container *ngTemplateOutlet="calendar"></ng-container>
+        <div class="calendar-header">
+            <button type="button" class="date-picker-action" (click)="setMode(ControlMode.Months)">{{ months[calendarData.month].fullName }}</button>
+            <button type="button" class="date-picker-action" (click)="setMode(ControlMode.Years)">{{ calendarData.year }}</button>
+        </div>
+        @switch (mode) {
+            @case (ControlMode.Calendar){
+                <ng-container *ngTemplateOutlet="calendarTable"></ng-container>
+            }
+            @case (ControlMode.Months){
+                <ng-container *ngTemplateOutlet="monthTable"></ng-container>
+            }
+            @case (ControlMode.Years){
+                <ng-container *ngTemplateOutlet="yearTable"></ng-container>
+            }
+        }
     </div>
     }
 </div>
-<ng-template #calendar>
-    <div class="calendar-header"><span>{{ months[calendarData.month].fullName }}</span>&nbsp;<span>{{
-            calendarData.year }}</span></div>
+<ng-template #calendarTable>
     <div class="calendar-body">
         <table class="calendar-table">
             <thead>
@@ -22,14 +34,13 @@
                 </tr>
             </thead>
             <tbody>
-                @for(week of calendarData.weeks; track $index) {
+                @for(week of calendarData.monthTable; track $index) {
                 <tr>
                     @for(day of week.days; track $index) {
                     <td>
-                        @if(day.day == 0) {
-
+                        @if(day) {
+                            <button type="button" class="date-picker-action calendar-day" (click)="onDayClick(day)">{{day.day}}</button>
                         } @else {
-                            <span class="calendar-day" (click)="onDayClick(day)">{{day.day}}</span>
                         }
                     </td>
                     }
@@ -38,4 +49,22 @@
             </tbody>
         </table>
     </div>
+</ng-template>
+<ng-template #monthTable>
+    <table class="month-table">
+        <tbody>
+            @for(monthRow of monthDictionary; track $index) {
+            <tr>
+                @for(month of monthRow; track $index) {
+                    <td>
+                        <button type="button" class="date-picker-action" (click)="onMonthClick(month.index)">{{month.fullName}}</button>
+                    </td>
+                    }
+            </tr>
+            }
+        </tbody>
+    </table>
+</ng-template>
+<ng-template #yearTable>
+
 </ng-template>
