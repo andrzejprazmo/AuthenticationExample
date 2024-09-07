@@ -1,4 +1,41 @@
 <div class="input-group">
     <input type="text" class="form-control" [placeholder]="placeholder" [value]="formattedValue">
-    <button class="btn btn-outline-secondary" type="button">Calendar</button>
+    <button class="btn btn-outline-secondary calendar-button" type="button" (click)="toggleCalendar()">Calendar</button>
 </div>
+<div class="dropdown">
+    @if(calendarVisible) {
+    <div class="dropdown-content">
+        <ng-container *ngTemplateOutlet="calendar"></ng-container>
+    </div>
+    }
+</div>
+<ng-template #calendar>
+    <div class="calendar-header"><span>{{ months[calendarData.month].fullName }}</span>&nbsp;<span>{{
+            calendarData.year }}</span></div>
+    <div class="calendar-body">
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    @for(weekDay of weekDays; track $index) {
+                    <th>{{ weekDay.shortName}}</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for(week of calendarData.weeks; track $index) {
+                <tr>
+                    @for(day of week.days; track $index) {
+                    <td>
+                        @if(day.day == 0) {
+
+                        } @else {
+                            <span class="calendar-day" (click)="onDayClick(day)">{{day.day}}</span>
+                        }
+                    </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</ng-template>
