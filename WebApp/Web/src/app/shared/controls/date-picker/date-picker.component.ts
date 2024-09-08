@@ -94,6 +94,7 @@ export default class DatePickerComponent implements ControlValueAccessor, OnInit
 
   writeValue(obj: any): void {
     this.value = obj;
+    this.calendarData = this.calculateCalendarData(this.value || new Date());
   }
   registerOnChange(fn: any): void {
     this.onChange = fn;

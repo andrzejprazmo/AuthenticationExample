@@ -24,7 +24,7 @@ export default class AccountCreateComponent {
     firstName: '',
     lastName: '',
     password: '',
-    birthDate: null
+    birthDate: null// new Date(2023, 0, 1)
   });
 
   onSubmit() {
