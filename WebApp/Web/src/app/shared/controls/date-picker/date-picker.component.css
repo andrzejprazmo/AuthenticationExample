@@ -1,38 +1,150 @@
-/* Dropdown Button */
-.dropbtn {
-    background-color: #04AA6D;
-    color: white;
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
-    position: relative;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
-    display: block;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    right: 0;
-  }
-  
-  /* Links inside the dropdown */
-  .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #ddd;}
-  
-  /* Show the dropdown menu on hover */
-  .dropdown:hover .dropdown-content {display: block;}
-  
-  /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {background-color: #3e8e41;}
+.dropdown {
+  position: relative;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  right: 0;
+  font-size: 14px;
+}
+
+.dropdown-content .calendar-header {
+  padding: 8px;
+  text-align: center;
+}
+
+.dropdown-content .calendar-header button {
+  cursor: pointer;
+  margin-right: 4px;
+
+}
+
+.calendar-body {
+  padding: 4px;
+}
+
+.calendar-body .calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: solid 1px #ddd;
+}
+
+.calendar-body .calendar-table th,
+td {
+  border: 1px solid #ddd;
+  width: 16px;
+  height: 16px;
+}
+
+.calendar-body .calendar-table th {
+  text-align: center;
+  background-color: #ddd;
+}
+
+.calendar-body .calendar-table td {
+  padding: 0;
+}
+
+.calendar-body .calendar-table .calendar-day {
+  display: block;
+  width: 100%;
+  border: none;
+}
+
+.calendar-body .calendar-table .calendar-day:hover {
+  background-color: #ddd;
+}
+
+.calendar-body .calendar-table .holiday {
+  color: red;
+}
+
+.calendar-body .calendar-table .selected {
+  font-weight: bold;
+}
+
+.close-button {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.month-table {
+  padding: 2px;
+}
+
+.month-table .month-header {
+  margin-bottom: 2px;
+  text-align: right;
+}
+
+.month-table .month-body button {
+  cursor: pointer;
+  margin: 4px;
+  width: 90px;
+}
+
+.year-table {
+  padding: 2px;
+}
+
+.year-table .year-header {
+  margin-bottom: 2px;
+  text-align: right;
+}
+
+.year-table .year-body button.up-button {
+  display: block;
+  width: 100%;
+}
+
+.year-table .year-body button.down-button {
+  display: block;
+  width: 100%;
+}
+
+.year-table .year-body button.year-button {
+  width: 70px;
+  margin: 2px;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid black;
+  margin: 8px auto;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid black;
+  margin: 8px auto;
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+
+  border-left: 5px solid black;
+}
+
+.arrow-left {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+
+  border-right: 5px solid black;
+}

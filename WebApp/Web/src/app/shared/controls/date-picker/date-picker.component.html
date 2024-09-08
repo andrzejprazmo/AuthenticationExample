@@ -1,24 +1,28 @@
 <div class="input-group">
     <input type="text" class="form-control" [placeholder]="placeholder" [value]="formattedValue">
-    <button class="btn btn-outline-secondary date-picker-action" type="button" (click)="toggleCalendar()">Calendar</button>
+    <button class="btn btn-outline-secondary date-picker-action" type="button"
+        (click)="toggleCalendar()">Calendar</button>
 </div>
 <div class="dropdown">
     @if(calendarVisible) {
     <div class="dropdown-content">
         <div class="calendar-header">
-            <button type="button" class="date-picker-action" (click)="setMode(ControlMode.Months)">{{ months[calendarData.month].fullName }}</button>
-            <button type="button" class="date-picker-action" (click)="setMode(ControlMode.Years)">{{ calendarData.year }}</button>
+            <button type="button" class="date-picker-action selected-month" (click)="setMode(ControlMode.Months)">{{
+                months[calendarData.month].fullName }}</button>
+            <button type="button" class="date-picker-action selected-year" (click)="setMode(ControlMode.Years)">{{
+                calendarData.year
+                }}</button>
         </div>
         @switch (mode) {
-            @case (ControlMode.Calendar){
-                <ng-container *ngTemplateOutlet="calendarTable"></ng-container>
-            }
-            @case (ControlMode.Months){
-                <ng-container *ngTemplateOutlet="monthTable"></ng-container>
-            }
-            @case (ControlMode.Years){
-                <ng-container *ngTemplateOutlet="yearTable"></ng-container>
-            }
+        @case (ControlMode.Calendar){
+        <ng-container *ngTemplateOutlet="calendarTable"></ng-container>
+        }
+        @case (ControlMode.Months){
+        <ng-container *ngTemplateOutlet="monthTable"></ng-container>
+        }
+        @case (ControlMode.Years){
+        <ng-container *ngTemplateOutlet="yearTable"></ng-container>
+        }
         }
     </div>
     }
@@ -29,7 +33,7 @@
             <thead>
                 <tr>
                     @for(weekDay of weekDays; track $index) {
-                    <th>{{ weekDay.shortName}}</th>
+                    <th [class.holiday]="$index == 6">{{ weekDay.shortName}}</th>
                     }
                 </tr>
             </thead>
@@ -39,7 +43,8 @@
                     @for(day of week.days; track $index) {
                     <td>
                         @if(day) {
-                            <button type="button" class="date-picker-action calendar-day" (click)="onDayClick(day)">{{day.day}}</button>
+                        <button type="button" class="date-picker-action calendar-day" [class.holiday]="day.holiday"
+                            [class.selected]="day.selected" (click)="onDayClick(day)">{{day.day}}</button>
                         } @else {
                         }
                     </td>
@@ -51,20 +56,24 @@
     </div>
 </ng-template>
 <ng-template #monthTable>
-    <table class="month-table">
-        <tbody>
-            @for(monthRow of monthDictionary; track $index) {
-            <tr>
-                @for(month of monthRow; track $index) {
-                    <td>
-                        <button type="button" class="date-picker-action" (click)="onMonthClick(month.index)">{{month.fullName}}</button>
-                    </td>
-                    }
-            </tr>
+    <div class="month-table">
+        <div class="month-header"><button type="button" class="date-picker-action close-button" (click)="setMode(ControlMode.Calendar)">x</button></div>
+        <div class="month-body">
+            @for(month of months; track $index) {
+            <button type="button" class="date-picker-action" (click)="onMonthClick(month.index)">{{month.fullName}}</button>
             }
-        </tbody>
-    </table>
+        </div>
+        </div>
 </ng-template>
 <ng-template #yearTable>
-
+    <div class="year-table">
+        <div class="year-header"><button type="button" class="date-picker-action close-button" (click)="setMode(ControlMode.Calendar)">x</button></div>
+        <div class="year-body">
+            <div><button type="button" class="date-picker-action up-button" (click)="setYearRange(-1 * yearPageSize)"><div class="date-picker-action arrow-up"></div></button></div>
+            @for(year of yearDictionary; track $index) {
+            <button type="button" class="date-picker-action year-button" (click)="onYearClick(year)">{{year}}</button>
+            }
+            <div><button type="button" class="date-picker-action down-button" (click)="setYearRange(yearPageSize)"><div class="date-picker-action arrow-down"></div></button></div>
+                </div>
+    </div>
 </ng-template>

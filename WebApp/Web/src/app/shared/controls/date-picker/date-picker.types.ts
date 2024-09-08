@@ -11,6 +11,8 @@ export interface Day {
     day: number;
     month: number;
     year: number;
+    holiday: boolean;
+    selected: boolean;
 }
 export interface Week {
     days: Day[];
