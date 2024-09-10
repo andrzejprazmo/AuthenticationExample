@@ -9,6 +9,7 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { firstValueFrom, tap } from 'rxjs';
 import { APPLICATION_CONFIG, GlobalConfiguration } from '@shared/types/global.types';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 
 const jwtOptionsProvider: Provider = {
@@ -54,7 +55,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom([
       JwtModule.forRoot({ jwtOptionsProvider }),
       ModalModule,
-      ToastrModule.forRoot()
+      ToastrModule.forRoot(),
+      DpDatePickerModule
     ])
   ]
 };

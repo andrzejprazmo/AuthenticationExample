@@ -6,11 +6,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import DatePickerComponent from '@shared/controls/date-picker/date-picker.component';
 import { addFormErrors } from '@shared/helpers/error.helper';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
   selector: 'app-account-create',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterModule, DatePickerComponent],
+  imports: [ReactiveFormsModule, RouterModule, DatePickerComponent, DpDatePickerModule],
   templateUrl: './account-create.component.html',
   styleUrl: './account-create.component.css'
 })
