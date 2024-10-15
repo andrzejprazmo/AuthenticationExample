@@ -9,6 +9,11 @@ using WebApp.Domain.Configuration;
 namespace WebApp.Installers;
 public static class ApiInstaller
 {
+    /// <summary>
+    /// Install API services
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static IServiceCollection AddApi(this IServiceCollection services)
     {
         var rules = Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsClass && typeof(IEndpointsModule).IsAssignableFrom(t));
