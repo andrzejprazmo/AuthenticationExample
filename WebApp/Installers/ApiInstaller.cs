@@ -10,7 +10,7 @@ namespace WebApp.Installers;
 public static class ApiInstaller
 {
     /// <summary>
-    /// Install API services
+    /// Install API endpoints
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
