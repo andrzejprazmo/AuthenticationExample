@@ -12,7 +12,7 @@ var webApplicationOptions = new WebApplicationOptions
 var builder = WebApplication.CreateBuilder(webApplicationOptions);
 
 builder.Services.AddEndpointsApiExplorer();
-// swagger configuration
+// swagger configuration AAAAAA
 builder.Services.AddSwaggerGen(context =>
 {
     context.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthenticationExample.WebApp", Version = "v1" });
