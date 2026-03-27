@@ -40,6 +40,8 @@ builder.Services.AddSwaggerGen(context =>
         }
     });
 });
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 builder.Services.AddJwt(builder.Configuration).AddAuthorization();
 builder.Services.AddApi();
 builder.Services.AddCore();
@@ -60,6 +62,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
+app.MapReverseProxy();
 app.UseApi();
 
 app.MapFallbackToFile("index.html");

@@ -30,9 +30,12 @@ export class LoginService {
   }
 
   logout(): Observable<any> {
-    return this.http.post<any>('api/auth/logout', null).pipe(map(() => {
+    return this.http.post<any>('/api/auth/logout', null).pipe(map(() => {
       this.authService.removeToken();
     }));
   }
 
+  getWeather(): Observable<any> {
+    return this.http.get<any>('/api/external/weather');
+  }
 }

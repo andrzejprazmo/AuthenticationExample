@@ -23,6 +23,11 @@ export default class LoginComponent {
 
   ngOnInit() {
     this.loginService.logout().subscribe();
+    this.loginService.getWeather().subscribe({
+      next: (weather) => {
+        console.log('Weather:', weather);
+      }
+    });
   }
 
   onSubmit() {
