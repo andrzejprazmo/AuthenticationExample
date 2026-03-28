@@ -21,6 +21,13 @@ public class AuthenticationEndpoints : IEndpointsModule
         var result = await mediator.Send(request);
         return result.Match((data) =>
         {
+            context.Response.Cookies.Append("MY-CUSTOM-COOKIE", "This is custom cookie", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
+            });
             return Results.Ok(data.Token);
         }, (errors) => Results.BadRequest(errors));
     }

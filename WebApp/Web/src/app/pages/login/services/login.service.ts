@@ -35,7 +35,4 @@ export class LoginService {
     }));
   }
 
-  getWeather(): Observable<any> {
-    return this.http.get<any>('/NewPortal/Weather/Load');
-  }
 }

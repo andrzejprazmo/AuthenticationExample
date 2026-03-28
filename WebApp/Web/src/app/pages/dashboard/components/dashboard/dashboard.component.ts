@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DashboardService } from '@dashboard/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,5 +9,15 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard.component.css'
 })
 export default class DashboardComponent {
+
+  dashboardService = inject(DashboardService);
+
+  ngOnInit() {
+    this.dashboardService.getWeather().subscribe({
+      next: (weather) => {
+        console.log('Weather:', weather);
+      }
+    });
+  }
 
 }
