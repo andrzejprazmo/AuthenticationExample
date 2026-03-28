@@ -36,6 +36,6 @@ export class LoginService {
   }
 
   getWeather(): Observable<any> {
-    return this.http.get<any>('/api/external/weather');
+    return this.http.get<any>('/NewPortal/Weather/Load');
   }
 }
