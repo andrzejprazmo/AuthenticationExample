@@ -12,6 +12,6 @@ export class DashboardService {
   http = inject(HttpClient);
 
   getWeather(): Observable<any> {
-    return this.http.get<any>('/NewPortal/Weather/Load');
+    return this.http.get<any>('NewPortal/Weather/Load');
   }
 }

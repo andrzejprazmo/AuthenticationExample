@@ -27,7 +27,7 @@ export function initializeApp(http: HttpClient, jwtConfig: JwtConfig, appConfig:
   return (): Promise<any> =>
     firstValueFrom(
       http
-        .get<GlobalConfiguration>('/api/config')
+        .get<GlobalConfiguration>('api/config')
         .pipe(tap(config => {
           jwtConfig.allowedDomains?.push(...config.baseDomain);
           appConfig.baseDomain = config.baseDomain

@@ -23,14 +23,14 @@ export class LoginService {
   }
 
   login(model: LoginFormModel): Observable<string> {
-    return this.http.post<string>('/api/auth/login', model).pipe(map(result => {
+    return this.http.post<string>('api/auth/login', model).pipe(map(result => {
       this.authService.saveToken(result);
       return result;
     }));
   }
 
   logout(): Observable<any> {
-    return this.http.post<any>('/api/auth/logout', null).pipe(map(() => {
+    return this.http.post<any>('api/auth/logout', null).pipe(map(() => {
       this.authService.removeToken();
     }));
   }
