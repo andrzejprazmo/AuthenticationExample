@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "iis": "ng build --watch --configuration development --base-href /AuthenticationExample.WebApp/",
     "test": "ng test"
   },
   "private": true,
