@@ -4,7 +4,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
+var webApplicationOptions = new WebApplicationOptions
+{
+    Args = args,
+    ApplicationName = typeof(Program).Assembly.FullName,
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    WebRootPath = "wwwroot/browser"
+};
+var builder = WebApplication.CreateBuilder(webApplicationOptions);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,6 +46,17 @@ builder.Services.AddSwaggerGen(context =>
 
 var jwtConfiguration = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new Exception("Cannot find JWT configuration");
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp", policy =>
+    {
+        policy.WithOrigins("https://localhost:7203")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters
@@ -64,6 +82,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowWebApp");
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -89,6 +108,10 @@ app.MapGet("/NewPortal/Weather/Load", (HttpContext context) =>
 .WithName("GetWeatherForecast")
 .WithOpenApi()
 .RequireAuthorization();
+
+app.UseStaticFiles();
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
 
