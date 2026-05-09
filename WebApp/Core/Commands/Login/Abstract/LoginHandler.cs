@@ -35,7 +35,7 @@ public abstract class LoginHandler<TRequest>: IRequestHandler<TRequest, Result<T
         if (validationResult.IsValid)
         {
             var data = GetRequest(request);
-            var account = await _accountRepository.GetAccountByLogin(data.Login);
+            var account = await _accountRepository.GetAccountByLogin(data.Login, ct);
             if (account is not null)
             {
                 var password = PasswordHelper.EncryptSSHA512(account.Login, data.Password);

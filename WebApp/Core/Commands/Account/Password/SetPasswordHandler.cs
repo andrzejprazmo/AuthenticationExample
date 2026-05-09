@@ -24,11 +24,11 @@ namespace WebApp.Core.Commands.Account.Password
             var validationResult = _validator.Validate(request);
             if (validationResult.IsValid)
             {
-                var account = await _accountRepository.GetAccountById(request.Id);
+                var account = await _accountRepository.GetAccountById(request.Id, cancellationToken);
                 if (account != null)
                 {
                     var encryptedPassword = PasswordHelper.EncryptSSHA512(account.Login, request.Password);
-                    await _accountRepository.SetPassword(request.Id, encryptedPassword);
+                    await _accountRepository.SetPassword(request.Id, encryptedPassword, cancellationToken);
                     return true;
                 }
                 return new Result<bool>(new List<ValidationFailure> { new ValidationFailure(string.Empty, "Cannot find id") });

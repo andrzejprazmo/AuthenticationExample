@@ -10,7 +10,7 @@ public class DeleteAccountValidator : AbstractValidator<DeleteAccountRequest>
     {
         RuleFor(x => x.Id).NotEmpty().GreaterThan(0).MustAsync(async (data, cancellation) =>
         {
-            var count = await accountRepository.GetAccountCount();
+            var count = await accountRepository.GetAccountCount(cancellation);
             return count > 1;
         }).WithErrorCode(ErrorCodes.ACCOUNT_CANNOT_DELETE_LAST);
     }

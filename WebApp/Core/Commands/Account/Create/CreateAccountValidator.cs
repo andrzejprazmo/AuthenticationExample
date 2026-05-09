@@ -12,13 +12,13 @@ public class CreateAccountValidator : AbstractValidator<CreateAccountRequest>
         RuleFor(x => x.Login).NotEmpty()
         .MinimumLength(3)
         .MaximumLength(50)
-        .MustAsync(async (data, cancellation) => !await accountRepository.AccountExists(data)).WithErrorCode(ErrorCodes.ACCOUNT_LOGIN_EXISTS);
+        .MustAsync(async (data, cancellation) => !await accountRepository.AccountExists(data, cancellation)).WithErrorCode(ErrorCodes.ACCOUNT_LOGIN_EXISTS);
 
         RuleFor(x => x.Password).NotEmpty()
             .MaximumLength(50)
             .Must(PasswordHelper.IsStrong)
             .WithErrorCode(ErrorCodes.ACCOUNT_PASSWORD_IS_WEAK);
-        
+
         RuleFor(x => x.FirstName).NotEmpty().MinimumLength(3).MaximumLength(50);
         RuleFor(x => x.LastName).NotEmpty().MinimumLength(3).MaximumLength(50);
     }

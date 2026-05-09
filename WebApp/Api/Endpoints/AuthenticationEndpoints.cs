@@ -16,9 +16,9 @@ public class AuthenticationEndpoints : IEndpointsModule
     }
 
     [ProducesResponseType(200, Type = typeof(string))]
-    private async Task<IResult> Login(HttpContext context, [FromServices] IMediator mediator, [FromBody] AuthenticateRequest request)
+    private async Task<IResult> Login(HttpContext context, [FromServices] IMediator mediator, [FromBody] AuthenticateRequest request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(request);
+        var result = await mediator.Send(request, cancellationToken);
         return result.Match((data) =>
         {
             context.Response.Cookies.Append("MY-CUSTOM-COOKIE", "This is custom cookie", new CookieOptions

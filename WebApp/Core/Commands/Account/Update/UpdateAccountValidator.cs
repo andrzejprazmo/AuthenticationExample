@@ -11,7 +11,7 @@ namespace WebApp.Core.Commands.Account.Update
             RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.Login).NotEmpty().MaximumLength(50).CustomAsync(async (data, context, cancellation) =>
             {
-                if (await accountRepository.AccountExists(data, context.InstanceToValidate.Id))
+                if (await accountRepository.AccountExists(data, context.InstanceToValidate.Id, cancellation))
                 {
                     context.AddFailure(new FluentValidation.Results.ValidationFailure
                     {

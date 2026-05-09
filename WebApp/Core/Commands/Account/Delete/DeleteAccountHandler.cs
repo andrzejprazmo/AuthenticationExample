@@ -22,7 +22,7 @@ public class DeleteAccountHandler : IRequestHandler<DeleteAccountRequest, Result
         var validationResult = await _validator.ValidateAsync(request);
         if (validationResult.IsValid)
         {
-            await _accountRepository.DeleteAccount(request.Id);
+            await _accountRepository.DeleteAccount(request.Id, cancellationToken);
             return true;
         }
         return new Result<bool>(validationResult.Errors);

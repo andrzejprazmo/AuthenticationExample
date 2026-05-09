@@ -30,7 +30,7 @@ public class CreateAccountHandler : IRequestHandler<CreateAccountRequest, Result
                 Password = PasswordHelper.EncryptSSHA512(request.Login, request.Password),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-            });
+            }, cancellationToken);
             return accountId;
         }
         return new Result<int>(validationResult.Errors);

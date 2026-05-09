@@ -16,7 +16,7 @@ public class GetAllAccountsHandler : IRequestHandler<GetAllAccountsRequest, IEnu
 
     public async Task<IEnumerable<AccountDto>> Handle(GetAllAccountsRequest request, CancellationToken cancellationToken)
     {
-        var list = await _accountRepository.GetAllAccounts();
+        var list = await _accountRepository.GetAllAccounts(cancellationToken);
         return list.Select(x => new AccountDto
         {
             Id = x.Id,

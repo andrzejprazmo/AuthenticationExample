@@ -16,7 +16,7 @@ namespace WebApp.Core.Queries.Account.Edit
 
         public async Task<AccountDto> Handle(EditAccountRequest request, CancellationToken cancellationToken)
         {
-            var account = await _accountRepository.EditAccount(request.Id);
+            var account = await _accountRepository.EditAccount(request.Id, cancellationToken);
             return new AccountDto
             {
                 Id = account.Id,

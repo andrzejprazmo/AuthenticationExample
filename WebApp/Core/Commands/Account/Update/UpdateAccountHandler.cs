@@ -29,7 +29,7 @@ namespace WebApp.Core.Commands.Account.Update
                     Login = request.Login,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                });
+                }, cancellationToken);
                 return true;
             }
             return new Result<bool>(validationResult.Errors);

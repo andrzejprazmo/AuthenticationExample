@@ -29,7 +29,7 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenRequest, Result<T
             var refreshTokenEntity = await _tokenRepository.GetRefreshToken(refreshToken.Value);
             if (refreshTokenEntity != null && refreshTokenEntity!.Expires > DateTime.UtcNow)
             {
-                var account = await _accountRepository.GetAccountById(refreshTokenEntity.UserId);
+                var account = await _accountRepository.GetAccountById(refreshTokenEntity.UserId, cancellationToken);
                 if (account != null)
                 {
                     var token = await _tokenRepository.CreateToken(account);

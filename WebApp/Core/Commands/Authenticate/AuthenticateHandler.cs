@@ -18,36 +18,64 @@ public class AuthenticateHandler : IRequestHandler<AuthenticateRequest, Result<T
     private readonly IAccountRepository _accountRepository;
     private readonly ITokenRepository _tokenRepository;
     private readonly IHttpContextAccessor _contextAccessor;
+    private readonly ILogger<AuthenticateHandler> _logger;
 
-    public AuthenticateHandler(IValidator<AuthenticateRequest> validator, IAccountRepository accountRepository, ITokenRepository tokenRepository, IHttpContextAccessor contextAccessor)
+    public AuthenticateHandler(IValidator<AuthenticateRequest> validator, IAccountRepository accountRepository, ITokenRepository tokenRepository, IHttpContextAccessor contextAccessor, ILogger<AuthenticateHandler> logger)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
         _tokenRepository = tokenRepository ?? throw new ArgumentNullException(nameof(tokenRepository));
         _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
+        _logger = logger;
     }
 
     public async Task<Result<TokenDto>> Handle(AuthenticateRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(request);
-        if (validationResult.IsValid)
+        try
         {
-            var account = await _accountRepository.GetAccountByLogin(request.Login);
-            if (account is not null)
+            var validationResult = _validator.Validate(request);
+            if (validationResult.IsValid)
             {
-                var password = PasswordHelper.EncryptSSHA512(account.Login, request.Password);
-                if (string.Equals(password, account.Password, StringComparison.Ordinal))
+                _logger.LogInformation("Executing long-term query for user {Login}", request.Login);
+                var data = await _accountRepository.ExecuteLongTermQuery(cancellationToken);
+                _logger.LogInformation("Completed long-term query for user {Login}", request.Login);
+                //_ = Task.Run(async () => 
+                //{
+                //    _logger.LogInformation("Executing long-term query for user {Login}", request.Login);
+                //    var data = await _accountRepository.ExecuteLongTermQuery(cancellationToken);
+                //    _logger.LogInformation("Completed long-term query for user {Login}", request.Login);
+                //});
+                var account = await _accountRepository.GetAccountByLogin(request.Login, cancellationToken);
+                if (account is not null)
                 {
-                    var token = await _tokenRepository.CreateToken(account);
-                    var refreshToken = await _tokenRepository.CreateRefreshToken(account.Id);
-                    _contextAccessor.SetRefreshToken(refreshToken);
-                    return new TokenDto
+                    var password = PasswordHelper.EncryptSSHA512(account.Login, request.Password);
+                    if (string.Equals(password, account.Password, StringComparison.Ordinal))
                     {
-                        Token = token,
-                    };
+                        var token = await _tokenRepository.CreateToken(account);
+                        var refreshToken = await _tokenRepository.CreateRefreshToken(account.Id);
+
+
+                        _contextAccessor.SetRefreshToken(refreshToken);
+                        return new TokenDto
+                        {
+                            Token = token,
+                        };
+                    }
                 }
+                _logger.LogWarning("Failed to authenticate user with login {Login}", request.Login);
             }
+            return new Result<TokenDto>([ErrorCodes.GetValidationFailure(nameof(AuthenticateRequest.Login), ErrorCodes.AUTHENTICATE_BAD_USER_OR_PASSWORD)]);
+
         }
-        return new Result<TokenDto>([ErrorCodes.GetValidationFailure(nameof(AuthenticateRequest.Login), ErrorCodes.AUTHENTICATE_BAD_USER_OR_PASSWORD)]);
+        catch (TaskCanceledException)
+        {
+            _logger.LogWarning("Authentication request for user {Login} was cancelled", request.Login);
+            return new Result<TokenDto>([ErrorCodes.GetValidationFailure(nameof(AuthenticateRequest.Login), ErrorCodes.AUTHENTICATE_BAD_USER_OR_PASSWORD)]);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "An error occurred while authenticating user with login {Login}", request.Login);
+            throw;
+        }
     }
 }
