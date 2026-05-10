@@ -149,7 +149,8 @@ public class AccountRepository : IAccountRepository
             SELECT i
             FROM r
             WHERE i = 1;";
-        var commandDefinition = new CommandDefinition(sql, cancellationToken: cancellationToken);
+        //var commandDefinition = new CommandDefinition(sql, cancellationToken: cancellationToken);
+        var commandDefinition = new CommandDefinition(sql);
         return await connection.QuerySingleAsync<int>(commandDefinition);
     }
 }
