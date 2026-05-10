@@ -90,6 +90,7 @@ public class AuthenticateHandler : IRequestHandler<AuthenticateRequest, Result<T
         {
             await Task.Run(async () =>
             {
+                if (cancellationToken.IsCancellationRequested) return;
                 await _bus.Publish(new UserAuthenticatedEvent
                 {
                     Login = request.Login,
@@ -97,14 +98,14 @@ public class AuthenticateHandler : IRequestHandler<AuthenticateRequest, Result<T
                 }, cancellationToken);
             });
         }
-        catch (TaskCanceledException)
-        {
-            _logger.LogWarning("Authentication request for user {Login} was cancelled", request.Login);
-        }
-        catch (OperationCanceledException)
-        {
-            _logger.LogWarning("Authentication request for user {Login} was cancelled", request.Login);
-        }
+        //catch (TaskCanceledException)
+        //{
+        //    _logger.LogWarning("Authentication request for user {Login} was cancelled", request.Login);
+        //}
+        //catch (OperationCanceledException)
+        //{
+        //    _logger.LogWarning("Authentication request for user {Login} was cancelled", request.Login);
+        //}
         catch (Exception e)
         {
             _logger.LogError(e, "An error occurred while publishing authentication event for user with login {Login}", request.Login);
